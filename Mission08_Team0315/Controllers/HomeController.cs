@@ -21,7 +21,15 @@ namespace Mission08_Team0315.Controllers
             return View();
         }
 
+
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
         // quadrants view that lists out tasks into quadrants
+
         public IActionResult Quadrants()
         {
 
