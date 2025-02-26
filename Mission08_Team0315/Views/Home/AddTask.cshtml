@@ -1,0 +1,33 @@
+﻿@model Task
+@*     You're working on step 2; idiot *@
+
+
+<h1>Add A Task</h1>
+
+<form asp-action="@(Model.TaskId == 0 ? "AddTask" : "Edit")" method="post">
+	<input type="hidden" asp-for="TaskId" /><br />
+
+	<label>Task Name:</label>
+	<input asp-for="TaskName" required /><br />
+
+	<label>Due Date:</label>
+	<input asp-for="DueDate" /><br />
+
+	<label>Quadrant:</label>
+	<input asp-for="Quadrant" required /><br />
+
+	<label>Category:</label>
+	<select asp-for="Category">
+		<option>Home</option>
+		<option>School</option>
+		<option>Work</option>
+		<option>Church</option>
+	</select><br>
+
+	<label>Completed</label>
+	<input asp-for="Status" type="checkbox" /><br />
+
+	<button type="submit">Submit</button>
+
+	<div asp-validation-summary='All'></div>
+</form>
