@@ -5,24 +5,23 @@ using Mission08_Team0315.Models;
 
 namespace Mission08_Team0315.Controllers
 {
+    // home controller that contains the backend code
     public class HomeController : Controller
     {
-        private QuadrantContext _taskContext;
+        private QuadrantContext _QuadrantContext;
 
-        public HomeController(QuadrantContext temp) //constructor 
+        public HomeController(QuadrantContext temp) //constructor for Home controller
         {
             _quadrantContext = temp;
         }
 
+        // index view
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        // quadrants view that lists out tasks into quadrants
         public IActionResult Quadrants()
         {
 
@@ -33,6 +32,8 @@ namespace Mission08_Team0315.Controllers
 
             return View(task);
         }
+
+        // getting the db things necessary to add a task
 
         [HttpGet]
         public IActionResult AddTask()
@@ -49,6 +50,8 @@ namespace Mission08_Team0315.Controllers
 
             return View();
         }
+
+        // posting the new task into the db
 
         [HttpPost]
 
