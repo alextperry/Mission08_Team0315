@@ -1,16 +1,17 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mission08_Team0315.Models;
 
 namespace Mission08_Team0315.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private QuadrantContext _taskContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(QuadrantContext temp) //constructor 
         {
-            _logger = logger;
+            _quadrantContext = temp;
         }
 
         public IActionResult Index()
@@ -22,11 +23,104 @@ namespace Mission08_Team0315.Controllers
         {
             return View();
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Quadrants()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+            var task = _quadrantContext.Tasks
+                .ToList()
+                .Include(x => x.Category);
+
+
+            return View(task);
         }
+
+        [HttpGet]
+        public IActionResult AddTask()
+        {
+            Task task = new Task();
+
+            ViewBag.Categories = _context.Categories
+                .OrderBy(x => x.CategoryName)
+                .ToList();
+
+            ViewBag.Tasks = _context.Tasks
+                .OrderBy(x => x.TaskName)
+                .ToList();
+
+            return View();
+        }
+
+        [HttpPost]
+
+        public IActionResult AddTask(Task response)
+        {
+            ViewBag.Categories = _context.Categories
+                .OrderBy(x => x.CategoryName)
+                .ToList();
+
+            if (ModelState.IsValid)
+            {
+                _context.Tasks.Add(response); // whatever was passed this adds the record to the db 
+
+                _context.SaveChanges();
+                
+                return View(response); // returns the view and the data to be passed to the db 
+            }
+            else // invalid data
+            {
+                return View(response);
+            }
+        }
+
+        // get method for the edit page to get all records and create a viewbag
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var recordToEdit = _context.Tasks // querying the db with Linq
+                .Single(x => x.TaskId == id);
+
+            ViewBag.Categories = _context.Categories
+                .OrderBy(x => x.CategoryName)
+                .ToList();
+
+            return View("AddTask", recordToEdit);
+        }
+
+        // post method to return an edited record to the db 
+
+        [HttpPost]
+        public IActionResult Edit(Task updatedInfo)
+        {
+            _context.Update(updatedInfo);
+            _context.SaveChanges();
+
+            return RedirectToAction("Quadrants");
+        }
+
+
+        // getting the method to delete
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var recordToDelete = _context.Tasks
+                .Single(x => x.TaskId == id);
+
+            return View("Delete", recordToDelete);
+        }
+
+        // posting the updated db without the record that was deleted
+
+        [HttpPost]
+        public IActionResult Delete(Task task)
+        {
+            _context.Tasks.Remove(task);
+            _context.SaveChanges();
+
+            return RedirectToAction("Quadrants");
+        }
+
+
     }
 }
