@@ -132,6 +132,5 @@ namespace Mission08_Team0315.Controllers
             return RedirectToAction("Quadrants");
         }
 
-
     }
 }
