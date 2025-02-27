@@ -8,6 +8,9 @@ namespace Mission08_Team0315.Models
         [Key]
         public int TaskId { get; set; }
 
+        [Required]
+        public string TaskName { get; set; }
+
         [ForeignKey("CategoryId")]
         public int? CategoryId { get; set; }
       
