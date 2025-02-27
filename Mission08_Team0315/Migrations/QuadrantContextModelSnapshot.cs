@@ -72,6 +72,10 @@ namespace Mission08_Team0315.Migrations
                     b.Property<int>("Quadrant")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("TaskName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("TaskId");
 
                     b.HasIndex("CategoryId");
