@@ -34,6 +34,7 @@ namespace Mission08_Team0315.Controllers
         {
 
             var task = _quadrantContext.Tasks
+                .Where(t => t.Completed == false || t.Completed == null) // Fetch only uncompleted tasks
                 .ToList();
 
 
