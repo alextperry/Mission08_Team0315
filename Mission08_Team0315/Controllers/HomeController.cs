@@ -8,7 +8,7 @@ namespace Mission08_Team0315.Controllers
     // home controller that contains the backend code
     public class HomeController : Controller
     {
-        private QuadrantContext _QuadrantContext;
+        private QuadrantContext _quadrantContext;
 
         public HomeController(QuadrantContext temp) //constructor for Home controller
         {
@@ -30,29 +30,29 @@ namespace Mission08_Team0315.Controllers
 
         // quadrants view that lists out tasks into quadrants
 
+
         public IActionResult Quadrants()
         {
+            var tasks = _quadrantContext.Tasks
+                .Include(x => x.Category)  // Include first
+                .ToList();                 // Execute query after Include
 
-            var task = _quadrantContext.Tasks
-                .ToList()
-                .Include(x => x.Category);
-
-
-            return View(task);
+            return View(tasks);
         }
+
 
         // getting the db things necessary to add a task
 
         [HttpGet]
         public IActionResult AddTask()
         {
-            Task task = new Task();
+            ToDoListForm task = new ToDoListForm();
 
-            ViewBag.Categories = _context.Categories
+            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
-            ViewBag.Tasks = _context.Tasks
+            ViewBag.Tasks = _quadrantContext.Tasks
                 .OrderBy(x => x.TaskName)
                 .ToList();
 
@@ -63,17 +63,17 @@ namespace Mission08_Team0315.Controllers
 
         [HttpPost]
 
-        public IActionResult AddTask(Task response)
+        public IActionResult AddTask(ToDoListForm response)
         {
-            ViewBag.Categories = _context.Categories
+            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
             if (ModelState.IsValid)
             {
-                _context.Tasks.Add(response); // whatever was passed this adds the record to the db 
+                _quadrantContext.Tasks.Add(response); // whatever was passed this adds the record to the db 
 
-                _context.SaveChanges();
+                _quadrantContext.SaveChanges();
                 
                 return View(response); // returns the view and the data to be passed to the db 
             }
@@ -88,10 +88,10 @@ namespace Mission08_Team0315.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var recordToEdit = _context.Tasks // querying the db with Linq
+            var recordToEdit = _quadrantContext.Tasks // querying the db with Linq
                 .Single(x => x.TaskId == id);
 
-            ViewBag.Categories = _context.Categories
+            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
@@ -101,10 +101,10 @@ namespace Mission08_Team0315.Controllers
         // post method to return an edited record to the db 
 
         [HttpPost]
-        public IActionResult Edit(Task updatedInfo)
+        public IActionResult Edit(ToDoListForm updatedInfo)
         {
-            _context.Update(updatedInfo);
-            _context.SaveChanges();
+            _quadrantContext.Update(updatedInfo);
+            _quadrantContext.SaveChanges();
 
             return RedirectToAction("Quadrants");
         }
@@ -115,7 +115,7 @@ namespace Mission08_Team0315.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var recordToDelete = _context.Tasks
+            var recordToDelete = _quadrantContext.Tasks
                 .Single(x => x.TaskId == id);
 
             return View("Delete", recordToDelete);
@@ -124,10 +124,10 @@ namespace Mission08_Team0315.Controllers
         // posting the updated db without the record that was deleted
 
         [HttpPost]
-        public IActionResult Delete(Task task)
+        public IActionResult Delete(ToDoListForm task)
         {
-            _context.Tasks.Remove(task);
-            _context.SaveChanges();
+            _quadrantContext.Tasks.Remove(task);
+            _quadrantContext.SaveChanges();
 
             return RedirectToAction("Quadrants");
         }
