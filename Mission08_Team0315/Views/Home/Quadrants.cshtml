@@ -1,30 +1,88 @@
+@model List<ToDoListForm>
 @{
     ViewData["Title"] = "Quadrants";
 }
 
 <div class="container">
-    <h2 class="text-center">Title</h2>
-    <div class="row text-center fw-bold" >
-        <div class="col-3 border p-2">blank</div>
+    <h2 class="text-center">Task Management</h2>
+    <div class="row text-center fw-bold">
+        <!--Quadrant labels-->
+        <div class="col-3 border p-2"></div>
         <div class="col-4 border p-2">Urgent</div>
         <div class="col-4 border p-2">Not Urgent</div>
     </div>
-
+    <!--Important label-->
     <div class="row text-center fw-bold">
         <div class="col-3 border p-3">Important</div>
+        
         <!-- Quadrant 1 -->
         <div class="col-4 border p-3">
             <h5>Quadrant 1</h5>
+            @foreach (var task in Model.Where(t => t.Quadrant == 1))
+            {
+                <div>
+                    <div class="task-item border p-2 mb-2">
+                        <span>@task.TaskName </span><br>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" asp-route-completed="true" class="btn btn-success btn-sm">Complete</a>
+                    </div>
+                </div>
+            }
         </div>
         <!-- Quadrant 2 -->
-        <div class="col-4 border p-3">Quadrant 2</div>
+        <div class="col-4 border p-3">
+            <h5>Quadrant 2</h5>
+            @foreach (var task in Model.Where(t => t.Quadrant == 2))
+            {
+                <div>
+                    <div class="task-item border p-2 mb-2">
+                        <span>@task.TaskName </span><br>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" asp-route-completed="true" class="btn btn-success btn-sm">Complete</a>
+                    </div>
+                </div>
+            }
+        </div>
+        
     </div>
 
     <div class="row text-center fw-bold">
         <div class="col-3 border p-3">Not Important</div>
         <!-- Quadrant 3 -->
-        <div class="col-4 border p-3">Quadrant 3</div>
+        <div class="col-4 border p-3">
+            <h5>Quadrant 3</h5>
+            @foreach (var task in Model.Where(t => t.Quadrant == 3))
+            {
+                <div>
+                    <div class="task-item border p-2 mb-2">
+                        <span>@task.TaskName </span><br>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" asp-route-completed="true" class="btn btn-success btn-sm">Complete</a>
+                    </div>
+                </div>
+            }
+        </div>
         <!-- Quadrant 4 -->
-        <div class="col-4 border p-3">Quadrant 4</div>
+        <div class="col-4 border p-3">
+            <h5>Quadrant 4</h5>
+            @foreach (var task in Model.Where(t => t.Quadrant == 4))
+            {
+                <div>
+                    <div class="task-item border p-2 mb-2">
+                        <span>@task.TaskName </span><br>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@task.TaskId" asp-route-completed="true" class="btn btn-success btn-sm">Complete</a>
+                    </div>
+                </div>
+            } 
+        </div>
+    </div>
+    <!-- Add New Task Button -->
+    <div class="text-center mt-3">
+        <a asp-action="AddTask" class="btn btn-primary">Add New Task</a>
     </div>
 </div>

@@ -37,7 +37,13 @@ namespace Mission08_Team0315.Controllers
                 .Include(x => x.Category)  // Include first
                 .ToList();                 // Execute query after Include
 
-            return View(tasks);
+            var task = _quadrantContext.Tasks
+                .Where(t => t.Completed == false || t.Completed == null) // Fetch only uncompleted tasks
+                .ToList();
+
+
+            return View(task);
+
         }
 
 
@@ -48,12 +54,16 @@ namespace Mission08_Team0315.Controllers
         {
             ToDoListForm task = new ToDoListForm();
 
+
             ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
             ViewBag.Tasks = _quadrantContext.Tasks
+
                 .OrderBy(x => x.TaskName)
+
                 .ToList();
 
             return View();
@@ -65,7 +75,9 @@ namespace Mission08_Team0315.Controllers
 
         public IActionResult AddTask(ToDoListForm response)
         {
+
             ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
@@ -91,7 +103,9 @@ namespace Mission08_Team0315.Controllers
             var recordToEdit = _quadrantContext.Tasks // querying the db with Linq
                 .Single(x => x.TaskId == id);
 
+
             ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
