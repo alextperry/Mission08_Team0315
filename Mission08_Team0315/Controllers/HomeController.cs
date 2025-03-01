@@ -66,7 +66,7 @@ namespace Mission08_Team0315.Controllers
 
                 .ToList();
 
-            return View();
+            return View(task);
         }
 
         // posting the new task into the db
