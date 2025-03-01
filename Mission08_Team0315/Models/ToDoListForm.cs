@@ -23,9 +23,9 @@ namespace Mission08_Team0315.Models
 
         public bool? Completed { get; set; }
 
-
-
-
-
+        public static implicit operator Task(ToDoListForm v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

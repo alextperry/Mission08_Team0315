@@ -11,6 +11,7 @@ namespace Mission08_Team0315.Models
 
         public DbSet<ToDoListForm> Tasks {  get; set; } //Tasks = Table Name
         public DbSet<QuadrantCategory> QuadrantCategories { get; set; } //Quadrant Categories = Table Name
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

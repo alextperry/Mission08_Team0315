@@ -30,8 +30,12 @@ namespace Mission08_Team0315.Controllers
 
         // quadrants view that lists out tasks into quadrants
 
+
         public IActionResult Quadrants()
         {
+            var tasks = _quadrantContext.Tasks
+                .Include(x => x.Category)  // Include first
+                .ToList();                 // Execute query after Include
 
             var task = _quadrantContext.Tasks
                 .Where(t => t.Completed == false || t.Completed == null) // Fetch only uncompleted tasks
@@ -39,7 +43,9 @@ namespace Mission08_Team0315.Controllers
 
 
             return View(task);
+
         }
+
 
         // getting the db things necessary to add a task
 
@@ -48,11 +54,16 @@ namespace Mission08_Team0315.Controllers
         {
             ToDoListForm task = new ToDoListForm();
 
-            ViewBag.Categories = _quadrantContext.QuadrantCategories
+
+            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
             ViewBag.Tasks = _quadrantContext.Tasks
+
+                .OrderBy(x => x.TaskName)
+
                 .ToList();
 
             return View();
@@ -64,7 +75,9 @@ namespace Mission08_Team0315.Controllers
 
         public IActionResult AddTask(ToDoListForm response)
         {
-            ViewBag.Categories = _quadrantContext.QuadrantCategories
+
+            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
@@ -90,7 +103,9 @@ namespace Mission08_Team0315.Controllers
             var recordToEdit = _quadrantContext.Tasks // querying the db with Linq
                 .Single(x => x.TaskId == id);
 
-            ViewBag.Categories = _quadrantContext.QuadrantCategories
+
+            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
@@ -100,7 +115,7 @@ namespace Mission08_Team0315.Controllers
         // post method to return an edited record to the db 
 
         [HttpPost]
-        public IActionResult Edit(Task updatedInfo)
+        public IActionResult Edit(ToDoListForm updatedInfo)
         {
             _quadrantContext.Update(updatedInfo);
             _quadrantContext.SaveChanges();
