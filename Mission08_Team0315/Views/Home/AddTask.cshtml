@@ -8,13 +8,13 @@
 
 	<label>Task Name:</label>
 	<input asp-for="TaskName" required /><br />
-
+	<br />
 	<label>Due Date:</label>
 	<input asp-for="DueDate" /><br />
-
+	<br />
 	<label>Quadrant:</label>
 	<input asp-for="Quadrant" required /><br />
-
+	<br />
 	<label>Category:</label>
 	<select asp-for="Category">
 		<option>Home</option>
@@ -22,10 +22,10 @@
 		<option>Work</option>
 		<option>Church</option>
 	</select><br>
-
+	<br />
 	<label>Completed</label>
 	<input asp-for="Completed" type="checkbox" /><br />
-
+	<br />
 	<button type="submit">Submit</button>
 
 	<div asp-validation-summary='All'></div>

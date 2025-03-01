@@ -8,36 +8,31 @@ namespace Mission08_Team0315.Controllers
     // home controller that contains the backend code
     public class HomeController : Controller
     {
-        private QuadrantContext _quadrantContext;
+        private QuadrantContext _context;
 
         public HomeController(QuadrantContext temp) //constructor for Home controller
         {
-            _quadrantContext = temp;
+            _context = temp;
         }
 
-        // index view
-        public IActionResult Index()
+
+            // index view
+            public IActionResult Index()
         {
             return View();
         }
 
-
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         // quadrants view that lists out tasks into quadrants
 
 
         public IActionResult Quadrants()
         {
-            var tasks = _quadrantContext.Tasks
+            var tasks = _context.Tasks
                 .Include(x => x.Category)  // Include first
                 .ToList();                 // Execute query after Include
 
-            var task = _quadrantContext.Tasks
+            var task = _context.Tasks
                 .Where(t => t.Completed == false || t.Completed == null) // Fetch only uncompleted tasks
                 .ToList();
 
@@ -55,18 +50,16 @@ namespace Mission08_Team0315.Controllers
             ToDoListForm task = new ToDoListForm();
 
 
-            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+            ViewBag.QuadrantCategories = _context.QuadrantCategories
 
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
-            ViewBag.Tasks = _quadrantContext.Tasks
-
+            ViewBag.Tasks = _context.Tasks
                 .OrderBy(x => x.TaskName)
-
                 .ToList();
 
-            return View();
+            return View(task);
         }
 
         // posting the new task into the db
@@ -76,16 +69,16 @@ namespace Mission08_Team0315.Controllers
         public IActionResult AddTask(ToDoListForm response)
         {
 
-            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+            ViewBag.QuadrantCategories = _context.QuadrantCategories
 
                 .OrderBy(x => x.CategoryName)
                 .ToList();
 
             if (ModelState.IsValid)
             {
-                _quadrantContext.Tasks.Add(response); // whatever was passed this adds the record to the db 
+                _context.Tasks.Add(response); // whatever was passed this adds the record to the db 
 
-                _quadrantContext.SaveChanges();
+                _context.SaveChanges();
                 
                 return View(response); // returns the view and the data to be passed to the db 
             }
@@ -100,11 +93,11 @@ namespace Mission08_Team0315.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var recordToEdit = _quadrantContext.Tasks // querying the db with Linq
+            var recordToEdit = _context.Tasks // querying the db with Linq
                 .Single(x => x.TaskId == id);
 
 
-            ViewBag.QuadrantCategories = _quadrantContext.QuadrantCategories
+            ViewBag.QuadrantCategories = _context.QuadrantCategories
 
                 .OrderBy(x => x.CategoryName)
                 .ToList();
@@ -117,8 +110,8 @@ namespace Mission08_Team0315.Controllers
         [HttpPost]
         public IActionResult Edit(ToDoListForm updatedInfo)
         {
-            _quadrantContext.Update(updatedInfo);
-            _quadrantContext.SaveChanges();
+            _context.Update(updatedInfo);
+            _context.SaveChanges();
 
             return RedirectToAction("Quadrants");
         }
@@ -129,7 +122,7 @@ namespace Mission08_Team0315.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var recordToDelete = _quadrantContext.Tasks
+            var recordToDelete = _context.Tasks
                 .Single(x => x.TaskId == id);
 
             return View("Delete", recordToDelete);
@@ -140,8 +133,8 @@ namespace Mission08_Team0315.Controllers
         [HttpPost]
         public IActionResult Delete(ToDoListForm task)
         {
-            _quadrantContext.Tasks.Remove(task);
-            _quadrantContext.SaveChanges();
+            _context.Tasks.Remove(task);
+            _context.SaveChanges();
 
             return RedirectToAction("Quadrants");
         }

@@ -21,7 +21,7 @@ namespace Mission08_Team0315.Models
         [Required]
         public int Quadrant { get; set; }
 
-        public bool? Completed { get; set; }
+        public bool Completed { get; set; } = false;
 
         public static implicit operator Task(ToDoListForm v)
         {
